@@ -1,6 +1,7 @@
 package no.uio.inf5750.assignment2.service.impl;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,9 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void updateCourse(int courseId, String courseCode, String name) {
-		// TODO Auto-generated method stub
+		Course updateCourse = courseDAO.getCourse(courseId);
+		updateCourse.setCourseCode(courseCode);
+		updateCourse.setName(name);
 
 	}
 
@@ -108,7 +111,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void delCourse(int courseId) {
-		courseDAO.delCourse(courseId);
+		Course course = getCourse(courseId);
+		courseDAO.delCourse(course);
 	}
 
     /**
@@ -119,8 +123,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void addAttendantToCourse(int courseId, int studentId) {
-		// TODO Auto-generated method stub
-
+		Course course = getCourse(courseId);
+		Student student = getStudent(studentId);
+		
+		Set<Student> students = course.getAttendants();
+		students.add(student);
+		course.setAttendants(students);
 	}
 
     /**
@@ -131,8 +139,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void removeAttendantFromCourse(int courseId, int studentId) {
-		// TODO Auto-generated method stub
-
+		Course course = getCourse(courseId);
+		Student student = getStudent(studentId);
+		
+		Set<Student> students = course.getAttendants();
+		students.remove(student);
+		course.setAttendants(students);
 	}
 
     /**
@@ -143,8 +155,9 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public int addDegree(String type) {
-		// TODO Auto-generated method stub
-		return 0;
+		Degree newDegree = new Degree(type);
+		int degreeID = degreeDAO.saveDegree(newDegree);
+		return degreeID;
 	}
 
     /**
@@ -155,8 +168,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void updateDegree(int degreeId, String type) {
-		// TODO Auto-generated method stub
-
+		Degree updateDegree = degreeDAO.getDegree(degreeId);
+		updateDegree.setType(type);
 	}
 
     /**
@@ -167,8 +180,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Degree getDegree(int degreeId) {
-		// TODO Auto-generated method stub
-		return null;
+		Degree d = degreeDAO.getDegree(degreeId);
+		return d;
 	}
 
     /**
@@ -179,8 +192,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Degree getDegreeByType(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		Degree d = degreeDAO.getDegreeByType(type);
+		return d;
 	}
 
 	/**
@@ -190,8 +203,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Collection<Degree> getAllDegrees() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Degree> degrees = degreeDAO.getAllDegrees();
+		return degrees;
 	}
 
     /**
@@ -202,8 +215,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void delDegree(int degreeId) {
-		// TODO Auto-generated method stub
-
+		Degree d = degreeDAO.getDegree(degreeId);
+		degreeDAO.delDegree(d);
 	}
 
     /**
@@ -214,8 +227,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void addRequiredCourseToDegree(int degreeId, int courseId) {
-		// TODO Auto-generated method stub
-
+		Degree degree = degreeDAO.getDegree(degreeId);
+		Course course = courseDAO.getCourse(courseId);
+		
+		Set<Course> reqCourses = degree.getRequiredCourses();
+		reqCourses.add(course);
+		degree.setRequiredCourses(reqCourses);
 	}
 
     /**
@@ -226,7 +243,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void removeRequiredCourseFromDegree(int degreeId, int courseId) {
-		// TODO Auto-generated method stub
+		Degree degree = degreeDAO.getDegree(degreeId);
+		Course course = courseDAO.getCourse(courseId);
+		
+		Set<Course> reqCourses = degree.getRequiredCourses();
+		reqCourses.remove(course);
+		degree.setRequiredCourses(reqCourses);
 
 	}
 
@@ -238,8 +260,9 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public int addStudent(String name) {
-		// TODO Auto-generated method stub
-		return 0;
+		Student student = new Student(name);
+		int studentID = studentDAO.saveStudent(student);
+		return studentID;
 	}
 
     /**
@@ -250,8 +273,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void updateStudent(int studentId, String name) {
-		// TODO Auto-generated method stub
-
+		Student student = studentDAO.getStudent(studentId);
+		student.setName(name);
 	}
 
     /**
@@ -262,8 +285,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Student getStudent(int studentId) {
-		// TODO Auto-generated method stub
-		return null;
+		Student student = studentDAO.getStudent(studentId);
+		return student;
 	}
 
     /**
@@ -274,8 +297,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Student getStudentByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Student student = studentDAO.getStudentByName(name);
+		return student;
 	}
 
     /**
@@ -285,8 +308,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public Collection<Student> getAllStudents() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Student> students = studentDAO.getAllStudents();
+		return students;
 	}
 
     /**
@@ -297,8 +320,8 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void delStudent(int studentId) {
-		// TODO Auto-generated method stub
-
+		Student student = getStudent(studentId);
+		studentDAO.delStudent(student);
 	}
 
 	 /**
@@ -309,8 +332,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void addDegreeToStudent(int studentId, int degreeId) {
-		// TODO Auto-generated method stub
-
+		Student student = studentDAO.getStudent(studentId);
+		Degree degree = degreeDAO.getDegree(degreeId);
+		
+		Set<Degree> degrees = student.getDegrees();
+		degrees.add(degree);
+		student.setDegrees(degrees);
 	}
 
     /**
@@ -321,8 +348,12 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void removeDegreeFromStudent(int studentId, int degreeId) {
-		// TODO Auto-generated method stub
-
+		Student student = studentDAO.getStudent(studentId);
+		Degree degree = degreeDAO.getDegree(degreeId);
+		
+		Set<Degree> degrees = student.getDegrees();
+		degrees.remove(degree);
+		student.setDegrees(degrees);
 	}
 
     /**
@@ -334,8 +365,26 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public boolean studentFulfillsDegreeRequirements(int studentId, int degreeId) {
-		// TODO Auto-generated method stub
-		return false;
+		Student student = studentDAO.getStudent(studentId);
+		Degree degree = degreeDAO.getDegree(degreeId);
+		
+		Set<Course> reqCourses = degree.getRequiredCourses();
+		Set<Course> finCourses = student.getCourses();
+		
+		int totalMatches = 0;
+		
+		for(Course c: reqCourses){
+			for(Course fc: finCourses){
+				if(c.equals(fc)){
+					totalMatches++;
+				}
+			}
+		}
+	
+		if(totalMatches == reqCourses.size()){
+			return true;
+		}
+		else return false;
 	}
 
 }
