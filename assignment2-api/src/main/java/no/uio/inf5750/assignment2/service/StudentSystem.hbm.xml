@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 25, 2014 12:52:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="no.uio.inf5750.assignment2.service.StudentSystem" table="STUDENTSYSTEM" abstract="true">
+        <id name="id" type="java.lang.Long">
+            <column name="ID" />
+            <generator class="assigned" />
+        </id>
+        <bag name="allCourses" table="COURSE" inverse="false" lazy="true">
+            <key></key>
+            <one-to-many class="no.uio.inf5750.assignment2.model.Course" />
+        </bag>
+        <bag name="allDegrees" table="DEGREE" inverse="false" lazy="true">
+            <key></key>
+            <one-to-many class="no.uio.inf5750.assignment2.model.Degree" />
+        </bag>
+        <bag name="allStudents" table="STUDENT" inverse="false" lazy="true">
+            <key></key>
+            <one-to-many class="no.uio.inf5750.assignment2.model.Student" />
+        </bag>
+    </class>
+</hibernate-mapping>
