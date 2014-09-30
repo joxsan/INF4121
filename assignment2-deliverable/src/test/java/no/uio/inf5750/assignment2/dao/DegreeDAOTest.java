@@ -30,10 +30,9 @@ public class DegreeDAOTest {
 	public void test_saveDegree(){
 		
 		int degreeID = degreeDAO.saveDegree(degree1);
-		degreetmp = degreeDAO.getDegree(degreeID);
-		assertNotNull(degreetmp);
-		degreetmp = degreeDAO.getDegree(-1);
-		assertNull(degreetmp);
+		degree1 = degreeDAO.getDegree(degreeID);
+		
+		assertEquals(degreeID, degree1.getId());
 		
 	}
 	
@@ -44,6 +43,31 @@ public class DegreeDAOTest {
 		assertNotNull(degreetmp);
 		degreetmp = degreeDAO.getDegree(-1);
 		assertNull(degreetmp);
+	}
+	
+	@Test
+	public void test_getDegreeByType(){
+		degreetmp = degreeDAO.getDegreeByType(type1);
+		assertNotNull(degreetmp);
+		assertEquals(degreetmp, degree1);
+		assertNotSame(degreetmp, degree2);
+		degreetmp = degreeDAO.getDegreeByType("Hacking og nettverk");
+		assertNull(degreetmp);
+	}
+	
+	@Test 
+	public void test_getAllDegrees(){
+		Collection degrees = (Collection) degreeDAO.getAllDegrees();
+		
+	}
+	
+	@Test
+	public void test_delDegree(){
+		degreeDAO.delDegree(degree1);
+		degreetmp = degreeDAO.getDegreeByType(type1);
+		assertNull(degreetmp);
+		
+	
 	}
 	
 	
