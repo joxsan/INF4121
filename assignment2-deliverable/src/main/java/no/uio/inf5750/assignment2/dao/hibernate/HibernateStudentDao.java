@@ -15,7 +15,7 @@ import no.uio.inf5750.assignment2.model.Student;
 public class HibernateStudentDao implements StudentDAO {
 
 	@Autowired
-	SessionFactory sf;
+	SessionFactory sessionFactory;
     /**
      * Persists a student. An unique id is generated if the object is persisted
      * for the first time, and which is both set in the given student object and
@@ -26,7 +26,7 @@ public class HibernateStudentDao implements StudentDAO {
      */
 	@Override
 	public int saveStudent(Student student) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Integer studentID = (Integer)session.save(student);
 		
 		return studentID;
@@ -40,7 +40,7 @@ public class HibernateStudentDao implements StudentDAO {
      */
 	@Override
 	public Student getStudent(int id) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Student student = (Student) session.get(Student.class, id);
 		
 		return student;
@@ -54,12 +54,19 @@ public class HibernateStudentDao implements StudentDAO {
      */
 	@Override
 	public Student getStudentByName(String name) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		
 		Criteria crit = session.createCriteria(Student.class);
 		crit.add(Restrictions.eq("name", name));
 		
-		return (Student)crit.list();
+		Student s;
+		
+		if(crit.list().size() > 0) s = (Student) crit.list().get(0);
+		else s = null;
+		
+		return s;
+		
+		//return (Student)crit.list();
 	}
 
     /**
@@ -69,10 +76,11 @@ public class HibernateStudentDao implements StudentDAO {
      */
 	@Override
 	public Collection<Student> getAllStudents() {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "From Student";
 		
 		Query q = session.createQuery(hql);
+		
 		return q.list();
 	}
 
@@ -83,7 +91,7 @@ public class HibernateStudentDao implements StudentDAO {
      */
 	@Override
 	public void delStudent(Student student) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		session.delete(student);
 
 	}

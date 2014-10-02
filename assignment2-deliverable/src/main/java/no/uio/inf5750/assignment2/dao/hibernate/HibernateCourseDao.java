@@ -15,7 +15,7 @@ import no.uio.inf5750.assignment2.model.Course;
 public class HibernateCourseDao implements CourseDAO {
 
 	@Autowired
-	SessionFactory sf;
+	SessionFactory sessionFactory;
 	
     /**
      * Persists a course. An unique id is generated if the object is persisted
@@ -27,7 +27,7 @@ public class HibernateCourseDao implements CourseDAO {
      */
 	@Override
 	public int saveCourse(Course course) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Integer courseID = (Integer) session.save(course);
 		
 		return courseID;
@@ -41,7 +41,7 @@ public class HibernateCourseDao implements CourseDAO {
      */
 	@Override
 	public Course getCourse(int id) {	
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Course course = (Course) session.get(Course.class, id);
 		
 		return course;
@@ -55,11 +55,18 @@ public class HibernateCourseDao implements CourseDAO {
      */
 	@Override
 	public Course getCourseByCourseCode(String courseCode) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Criteria crit = session.createCriteria(Course.class);
 		crit.add(Restrictions.eq("courseCode", courseCode));
 		
-		return (Course)crit.list();
+		Course tmp;
+		
+		if(crit.list().size()>0)
+		tmp = (Course) crit.list().get(0);
+		
+		else tmp = null;
+		
+		return tmp;
 	}
 
     /**
@@ -71,11 +78,20 @@ public class HibernateCourseDao implements CourseDAO {
 	@Override
 	public Course getCourseByName(String name) {
 		
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Course.class);	
 		criteria.add(Restrictions.eq("name", name));
 		
-		return (Course)criteria.list();
+		Course tmp;
+		
+		if(criteria.list().size()>0)
+		tmp = (Course) criteria.list().get(0);
+		
+		else tmp = null;
+		
+		return tmp;
+		
+		//return (Course)criteria.list();
 	}
 
     /**
@@ -85,7 +101,7 @@ public class HibernateCourseDao implements CourseDAO {
      */
 	@Override
 	public Collection<Course> getAllCourses() {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "From Course";
 				
 		Query query = session.createQuery(hql);
@@ -99,7 +115,7 @@ public class HibernateCourseDao implements CourseDAO {
      */
 	@Override
 	public void delCourse(Course course) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		session.delete(course);
 	}
 

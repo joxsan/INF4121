@@ -2,16 +2,27 @@ package no.uio.inf5750.assignment2.dao;
 
 import static org.junit.Assert.*;
 
-import org.hibernate.mapping.Collection;
+import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import no.uio.inf5750.assignment2.model.Course;
+import no.uio.inf5750.assignment2.dao.hibernate.HibernateCourseDao;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath*:/META-INF/assignment2/beans.xml"})
+@Transactional
 public class CourseDAOTest {
 	
 	Course course1, course2, course3, coursetmp;
 	String name1, name2, name3;
+	
+	@Autowired
 	CourseDAO courseDAO;
 	
 	@Before 
@@ -28,8 +39,7 @@ public class CourseDAOTest {
 	}
 	
 	@Test
-	public void test_saveCourse(){
-		
+	public void test_saveCourse(){	
 	int courseID = courseDAO.saveCourse(course1);
 	course1 = courseDAO.getCourse(courseID);
 	int courseID2 = courseDAO.saveCourse(course2);
@@ -40,6 +50,7 @@ public class CourseDAOTest {
 	assertEquals(courseID,course1.getId());
 	assertEquals(courseID2,course2.getId());
 	assertEquals(courseID3,course3.getId());
+	
 	}
 	
 	@Test
@@ -56,10 +67,12 @@ public class CourseDAOTest {
 	@Test
 	public void test_getCourseByCourseCode(){
 	
+	courseDAO.saveCourse(course3);
 	coursetmp = courseDAO.getCourseByCourseCode("INF5750");
 	assertNotNull(coursetmp);
 	assertEquals(coursetmp, course3);
 	assertNotSame(coursetmp, course2);
+	coursetmp = null;
 	coursetmp = courseDAO.getCourseByCourseCode("INF404");
 	assertNull(coursetmp);
 	
@@ -67,6 +80,8 @@ public class CourseDAOTest {
 	
 	@Test
 	public void test_getCourseByName(){
+	courseDAO.saveCourse(course3);
+	coursetmp = courseDAO.getCourseByCourseCode("INF5750");
 	coursetmp = null;
 	coursetmp = courseDAO.getCourseByName(name3);
 	assertEquals(coursetmp, course3);
@@ -78,8 +93,7 @@ public class CourseDAOTest {
 	
 	@Test
 	public void test_getAllCourse(){
-	Collection courses = (Collection) courseDAO.getAllCourses();
-	
+	Collection<Course> courses = (Collection<Course>) courseDAO.getAllCourses();
 	
 	}
 	

@@ -16,7 +16,7 @@ import no.uio.inf5750.assignment2.model.Degree;
 public class HibernateDegreeDao implements DegreeDAO {
 
 	@Autowired
-	SessionFactory sf;
+	SessionFactory sessionFactory;
 	
     /**
      * Persists a degree. An unique id is generated if the object is persisted
@@ -29,7 +29,7 @@ public class HibernateDegreeDao implements DegreeDAO {
 	@Override
 	public int saveDegree(Degree degree) {
 		
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Integer degreeID = (Integer) session.save(degree);
 		
 		return degreeID;
@@ -43,7 +43,7 @@ public class HibernateDegreeDao implements DegreeDAO {
      */
 	@Override
 	public Degree getDegree(int id) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Degree degree = (Degree) session.get(Degree.class, id);
 		
 		return degree;
@@ -57,11 +57,19 @@ public class HibernateDegreeDao implements DegreeDAO {
      */
 	@Override
 	public Degree getDegreeByType(String type) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		Criteria crit = session.createCriteria(Degree.class);
 		crit.add(Restrictions.eq("type", type));
 		
-		return (Degree)crit.list();
+		Degree d;
+		if(crit.list().size() > 0)
+		d = (Degree) crit.list().get(0);
+		
+		else d = null;
+		
+		return d;
+		
+		//return (Degree)crit.list();
 	}
 
     /**
@@ -71,11 +79,11 @@ public class HibernateDegreeDao implements DegreeDAO {
      */
 	@Override
 	public Collection<Degree> getAllDegrees() {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "From Degree";
 				
 		Query query = session.createQuery(hql);
-		return query.list();
+		return (Collection)query.list();
 	}
 
     /**
@@ -85,7 +93,7 @@ public class HibernateDegreeDao implements DegreeDAO {
      */
 	@Override
 	public void delDegree(Degree degree) {
-		Session session = sf.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		session.delete(degree);
 	}
 

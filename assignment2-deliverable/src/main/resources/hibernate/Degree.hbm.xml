@@ -3,22 +3,19 @@
   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-  <class name="no.uio.inf5750.assignment2.model.Degree" table="degrees">
-    <id name="id" column="id">
+  <class name="no.uio.inf5750.assignment2.model.Degree" table="degree">
+    <id name="id">
       <generator class="native"/>
     </id>
-    <property name="type" not-null="true"/>
-   
-   <set name="courses" table="degree_courses">
+    
+    <property name="type" not-null="true" type="string"/>
+  
+   <set name="requiredCourses" table="degree_courses">
    		<key column="degree_id"/>
    		<many-to-many column="course_id"
-   			class="no.uio.inf5750.assignment2.model.Course" unique="true"/>
+   			class="no.uio.inf5750.assignment2.model.Course"/>
    </set>
    
-    <join table="student_degrees" inverse="true">
-    	<key column="degree_id"/>
-    	<many-to-one column="student_id" name="student"/>
-    </join>
     
   </class>
 </hibernate-mapping>
