@@ -4,7 +4,11 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import no.uio.inf5750.assignment2.dao.CourseDAO;
 import no.uio.inf5750.assignment2.dao.DegreeDAO;
@@ -14,6 +18,9 @@ import no.uio.inf5750.assignment2.model.Degree;
 import no.uio.inf5750.assignment2.model.Student;
 import no.uio.inf5750.assignment2.service.StudentSystem;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath*:/META-INF/assignment2/beans.xml"})
+@Transactional
 public class DefaultStudentSystem implements StudentSystem {
 
 	@Autowired

@@ -1,7 +1,7 @@
 package no.uio.inf5750.assignment2.dao.hibernate;
 
-import java.util.Collection;
 
+import java.util.Collection;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
