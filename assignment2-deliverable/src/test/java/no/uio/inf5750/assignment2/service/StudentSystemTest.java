@@ -27,16 +27,7 @@ import no.uio.inf5750.assignment2.service.impl.DefaultStudentSystem;
 public class StudentSystemTest {
 	
 	@Autowired
-	CourseDAO courseDAO;
-	
-	@Autowired
-	DegreeDAO degreeDAO;
-	
-	@Autowired
-	StudentDAO studentDAO;
-	
-	@Autowired
-	DefaultStudentSystem studentSystemDAO;
+	StudentSystem studentSystem;
 	
 	Course course1, course2;
 	Student student1, student2;
@@ -71,13 +62,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addCourse() {
-			
-		//int id = courseDAO.saveCourse(course1);
-		//course1 = courseDAO.getCourseByCourseCode("INF5150");
-		//assertEquals(id, course1.getId());
 		
-		int id = studentSystemDAO.addCourse(cName1, cName2);
-		Course tmp = studentSystemDAO.getCourse(id);
+		int id = studentSystem.addCourse(cName1, cName2);
+		Course tmp = studentSystem.getCourse(id);
 		assertNotNull(tmp);
 	}
 
@@ -90,10 +77,10 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_updateCourse() {
-		int id = courseDAO.saveCourse(course1);
-		studentSystemDAO.updateCourse(id, "INF515", "IT-systemer uangripelige");
-		
-		assertTrue(course1.getCourseCode().equals("INF515"));
+		int id = studentSystem.addCourse(cName1, cName2);
+		studentSystem.updateCourse(id, "INF515", "IT-systemer uangripelige");
+		Course tmp = studentSystem.getCourse(id);
+		assertTrue(tmp.getCourseCode().equals("INF515"));
 	}
 
     /**
@@ -104,9 +91,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getCourse() {
-		int id = courseDAO.saveCourse(course1);
-		studentSystemDAO.getCourse(id);
-		assertSame(id, course1.getId());
+		int id = studentSystem.addCourse(cName1, cName2);
+		Course tmp = studentSystem.getCourse(id);
+		assertNotNull(tmp);
 	}
 
     /**
@@ -117,9 +104,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getCourseByCourseCode() {
-		courseDAO.saveCourse(course1);
-		Course tmp = studentSystemDAO.getCourseByCourseCode(cName1);
-		assertSame(course1, tmp);
+		studentSystem.addCourse(cName1, cName2);
+		Course tmp = studentSystem.getCourseByCourseCode(cName1);
+		assertNotNull(tmp);
 	}
 
     /**
@@ -130,9 +117,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getCourseByName() {
-		courseDAO.saveCourse(course1);
-		Course tmp = studentSystemDAO.getCourseByName(cName1);
-		assertSame(course1, tmp);
+	studentSystem.addCourse(cName1, cName2);
+	Course tmp = studentSystem.getCourseByName(cName2);
+	assertNotNull(tmp);
 	}
 
     /**
@@ -142,11 +129,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getAllCourses() {
-		courseDAO.saveCourse(course1);
-		
-		Collection<Course> courses = studentSystemDAO.getAllCourses();
-		
-		assertTrue(courses.size()>0);
+	studentSystem.addCourse(cName1, cName2);
+	Collection<Course> courses = studentSystem.getAllCourses();
+	assertTrue(courses.size()>0);
 	}
 
     /**
@@ -157,10 +142,10 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_delCourse() {
-		int id = courseDAO.saveCourse(course1);
-		studentSystemDAO.delCourse(id);
-		Course tmp = studentSystemDAO.getCourse(id);
-		assertNull(tmp);
+	int id = studentSystem.addCourse(cName1, cName2);
+	studentSystem.delCourse(id);
+	Course tmp = studentSystem.getCourse(id);
+	assertNull(tmp);
 	}
 
     /**
@@ -171,11 +156,12 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addAttendantToCourse() {
-		int idc = courseDAO.saveCourse(course1);
-		int ids = studentDAO.saveStudent(student1);
+		int idc = studentSystem.addCourse(cName1, cName2);
+		int ids = studentSystem.addStudent(sName1);
 		
-		studentSystemDAO.addAttendantToCourse(idc, ids);
-		Collection<Student> s = course1.getAttendants();
+		studentSystem.addAttendantToCourse(idc, ids);
+		Course tmp = studentSystem.getCourse(idc);
+		Collection<Student> s = tmp.getAttendants();
 		assertTrue(s.size() > 0);
 	}
 
@@ -187,12 +173,13 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_removeAttendantFromCourse() {
-		int idc = courseDAO.saveCourse(course1);
-		int ids = studentDAO.saveStudent(student1);
+		int idc = studentSystem.addCourse(cName1, cName2);
+		int ids = studentSystem.addStudent(sName1);
 		
-		studentSystemDAO.addAttendantToCourse(idc, ids);
-		studentSystemDAO.removeAttendantFromCourse(idc, ids);
-		Collection<Student> s = course1.getAttendants();
+		studentSystem.addAttendantToCourse(idc, ids);
+		studentSystem.removeAttendantFromCourse(idc, ids);
+		Course tmp = studentSystem.getCourse(idc);
+		Collection<Student> s = tmp.getAttendants();
 		assertTrue(s.size() == 0);
 	}
 
@@ -204,8 +191,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addDegree() {
-		int id = studentSystemDAO.addDegree(dName1);
-		Degree tmp = studentSystemDAO.getDegree(id);
+		int id = studentSystem.addDegree(dName1);
+		Degree tmp = studentSystem.getDegree(id);
 		
 		assertNotNull(tmp);
 		
@@ -219,10 +206,10 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_updateDegree() {
-		int id = studentSystemDAO.addDegree(dName1);
-		studentSystemDAO.updateDegree(id, "Informatikk");
+		int id = studentSystem.addDegree(dName1);
+		studentSystem.updateDegree(id, "Informatikk");
 		
-		assertTrue(studentSystemDAO.getDegree(id).getType().equals("Informatikk"));
+		assertTrue(studentSystem.getDegree(id).getType().equals("Informatikk"));
 	}
 
     /**
@@ -233,8 +220,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getDegree() {
-		int id = studentSystemDAO.addDegree(dName1);
-		Degree tmp = studentSystemDAO.getDegree(id);
+		int id = studentSystem.addDegree(dName1);
+		Degree tmp = studentSystem.getDegree(id);
 		
 		assertNotNull(tmp);
 	}
@@ -247,8 +234,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getDegreeByType() {
-		int id = studentSystemDAO.addDegree(dName1);
-		Degree tmp = studentSystemDAO.getDegreeByType(dName1);
+		int id = studentSystem.addDegree(dName1);
+		Degree tmp = studentSystem.getDegreeByType(dName1);
 		
 		assertNotNull(tmp);
 	}
@@ -260,8 +247,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getAllDegrees() {
-		studentSystemDAO.addDegree(dName1);
-		Collection<Degree> d = studentSystemDAO.getAllDegrees();
+		studentSystem.addDegree(dName1);
+		Collection<Degree> d = studentSystem.getAllDegrees();
 		assertTrue(d.size() > 0);
 	}
 
@@ -273,9 +260,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_delDegree() {
-		int id = studentSystemDAO.addDegree(dName1);
-		studentSystemDAO.delDegree(id);
-		Degree tmp = studentSystemDAO.getDegree(id);
+		int id = studentSystem.addDegree(dName1);
+		studentSystem.delDegree(id);
+		Degree tmp = studentSystem.getDegree(id);
 		assertNull(tmp);
 	}
 
@@ -287,11 +274,11 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addRequiredCourseToDegree() {
-		int idd = studentSystemDAO.addDegree(dName1);
-		int idc = studentSystemDAO.addCourse(cName1, cName2);
+		int idd = studentSystem.addDegree(dName1);
+		int idc = studentSystem.addCourse(cName1, cName2);
 		
-		studentSystemDAO.addRequiredCourseToDegree(idd, idc);
-		Degree d = studentSystemDAO.getDegree(idd);
+		studentSystem.addRequiredCourseToDegree(idd, idc);
+		Degree d = studentSystem.getDegree(idd);
 		Collection<Course> c = d.getRequiredCourses();
 		assertTrue(c.size() > 0);
 	}
@@ -304,12 +291,12 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_removeRequiredCourseFromDegree() {
-		int idd = studentSystemDAO.addDegree(dName1);
-		int idc = studentSystemDAO.addCourse(cName1, cName2);
+		int idd = studentSystem.addDegree(dName1);
+		int idc = studentSystem.addCourse(cName1, cName2);
 		
-		studentSystemDAO.addRequiredCourseToDegree(idd, idc);
-		studentSystemDAO.removeRequiredCourseFromDegree(idd, idc);
-		Degree d = studentSystemDAO.getDegree(idd);
+		studentSystem.addRequiredCourseToDegree(idd, idc);
+		studentSystem.removeRequiredCourseFromDegree(idd, idc);
+		Degree d = studentSystem.getDegree(idd);
 		Collection<Course> c = d.getRequiredCourses();
 		assertTrue(c.size() == 0);
 	}
@@ -322,7 +309,9 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
+		int ids = studentSystem.addStudent(sName1);
+		Student tmp = studentSystem.getStudent(ids);
+		assertNotNull(tmp);
 	}
 
     /**
@@ -333,12 +322,11 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_updateStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		studentSystemDAO.updateStudent(ids, "Johan");
+		int ids = studentSystem.addStudent(sName1);
+		studentSystem.updateStudent(ids, "Johan");
 		
-		Student tmp = studentSystemDAO.getStudent(ids);
+		Student tmp = studentSystem.getStudent(ids);
 		assertSame(tmp.getName(), "Johan");
-		
 	}
 
     /**
@@ -349,8 +337,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		Student tmp = studentSystemDAO.getStudent(ids);
+		int ids = studentSystem.addStudent(sName1);
+		Student tmp = studentSystem.getStudent(ids);
 		
 		assertNotNull(tmp);
 	}
@@ -363,8 +351,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getStudentByName() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		Student tmp = studentSystemDAO.getStudentByName(sName1);
+		int ids = studentSystem.addStudent(sName1);
+		Student tmp = studentSystem.getStudentByName(sName1);
 		
 		assertNotNull(tmp);
 	}
@@ -376,8 +364,8 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_getAllStudents() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		Collection<Student> s = studentSystemDAO.getAllStudents();
+		int ids = studentSystem.addStudent(sName1);
+		Collection<Student> s = studentSystem.getAllStudents();
 		
 		assertTrue(s.size() > 0);
 	}
@@ -390,10 +378,10 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_delStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		studentSystemDAO.delStudent(ids);
+		int ids = studentSystem.addStudent(sName1);
+		studentSystem.delStudent(ids);
 		
-		Student tmp = studentSystemDAO.getStudent(ids);
+		Student tmp = studentSystem.getStudent(ids);
 		assertNull(tmp);
 	}
 
@@ -405,11 +393,11 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_addDegreeToStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		int idd = studentSystemDAO.addDegree(dName1);
-		studentSystemDAO.addDegreeToStudent(ids, idd);
+		int ids = studentSystem.addStudent(sName1);
+		int idd = studentSystem.addDegree(dName1);
+		studentSystem.addDegreeToStudent(ids, idd);
 		
-		Student s = studentSystemDAO.getStudent(ids);
+		Student s = studentSystem.getStudent(ids);
 		Collection<Degree> d = s.getDegrees();
 		assertTrue(d.size() > 0);
 	}
@@ -422,12 +410,12 @@ public class StudentSystemTest {
      */
 	@Test
 	public void test_removeDegreeFromStudent() {
-		int ids = studentSystemDAO.addStudent(sName1);
-		int idd = studentSystemDAO.addDegree(dName1);
-		studentSystemDAO.addDegreeToStudent(ids, idd);
+		int ids = studentSystem.addStudent(sName1);
+		int idd = studentSystem.addDegree(dName1);
+		studentSystem.addDegreeToStudent(ids, idd);
 		
-		Student s = studentSystemDAO.getStudent(ids);
-		studentSystemDAO.removeDegreeFromStudent(ids, idd);
+		Student s = studentSystem.getStudent(ids);
+		studentSystem.removeDegreeFromStudent(ids, idd);
 		Collection<Degree> d = s.getDegrees();
 		assertTrue(d.size() == 0);
 	}
@@ -442,22 +430,18 @@ public class StudentSystemTest {
 	@Test
 	public void test_studentFulfillsDegreeRequirements() {
 		
+		int id1 = studentSystem.addCourse(cName1, cName2);
+		int id2 = studentSystem.addStudent(sName1);
+		int id3 = studentSystem.addDegree(dName1);
+	
+		Degree tmp1 = studentSystem.getDegree(id3);
+		Course tmp2 = studentSystem.getCourse(id1);
+		studentSystem.addRequiredCourseToDegree(id3, id1);
+		studentSystem.addAttendantToCourse(id1, id2);
+		studentSystem.studentFulfillsDegreeRequirements(id1, id3);
+	
+		assertTrue(studentSystem.studentFulfillsDegreeRequirements(id2, id3));
 		
-//		int id1 = courseDAO.saveCourse(course1);
-//		int id2 = studentDAO.saveStudent(student1);
-//		int id3 = degreeDAO.saveDegree(degree1);
-		
-		courseDAO.saveCourse(course1);
-		studentDAO.saveStudent(student1);
-		degreeDAO.saveDegree(degree1);
-		
-	
-		//studentSystemDAO.addRequiredCourseToDegree(degree1.getId(), course1.getId());
-		//dss.addAttendantToCourse(id1, id2);
-		//dss.studentFulfillsDegreeRequirements(id1, id3);
-	
-	
-	
 /*		Student student = studentDAO.getStudent(studentId);
 		Degree degree = degreeDAO.getDegree(degreeId);
 		

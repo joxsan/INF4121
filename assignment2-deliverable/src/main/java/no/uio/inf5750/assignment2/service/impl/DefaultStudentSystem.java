@@ -18,7 +18,6 @@ import no.uio.inf5750.assignment2.model.Degree;
 import no.uio.inf5750.assignment2.model.Student;
 import no.uio.inf5750.assignment2.service.StudentSystem;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/META-INF/assignment2/beans.xml"})
 @Transactional
 public class DefaultStudentSystem implements StudentSystem {
@@ -118,8 +117,18 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void delCourse(int courseId) {
-		Course course = getCourse(courseId);
+		Course course = courseDAO.getCourse(courseId);
+		for(Student student: course.getAttendants()){
+		student.getCourses().remove(course);	
+		}
+		
+		for(Degree degree: degreeDAO.getAllDegrees()){
+			degree.getRequiredCourses().remove(course);
+			degreeDAO.saveDegree(degree);
+		}
+		
 		courseDAO.delCourse(course);
+		
 	}
 
     /**
@@ -223,6 +232,20 @@ public class DefaultStudentSystem implements StudentSystem {
 	@Override
 	public void delDegree(int degreeId) {
 		Degree d = degreeDAO.getDegree(degreeId);
+		
+		Collection<Student> s = studentDAO.getAllStudents();
+		for(Student st: s){
+			Collection<Degree> degree = st.getDegrees();
+			degree.remove(d);
+			/*for(Degree de: degree){
+				if(de.equals(d)){
+					degree.remove(d);
+				}
+				
+			}*/
+		}
+		
+		
 		degreeDAO.delDegree(d);
 	}
 
@@ -328,6 +351,18 @@ public class DefaultStudentSystem implements StudentSystem {
 	@Override
 	public void delStudent(int studentId) {
 		Student student = getStudent(studentId);
+		Collection<Course> c = student.getCourses();
+		
+		for(Course course: c){
+		Collection<Student> s = course.getAttendants();
+				for(Student st: s){
+					if(st.equals(student)){
+					s.remove(student);
+					}
+				}
+		
+		}
+		
 		studentDAO.delStudent(student);
 	}
 
