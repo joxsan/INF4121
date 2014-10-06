@@ -145,6 +145,9 @@ public class DefaultStudentSystem implements StudentSystem {
 		Set<Student> students = course.getAttendants();
 		students.add(student);
 		course.setAttendants(students);
+		Set<Course> courses = student.getCourses();
+		courses.add(course);
+		student.setCourses(courses);
 	}
 
     /**
@@ -416,16 +419,12 @@ public class DefaultStudentSystem implements StudentSystem {
 		int totalMatches = 0;
 		
 		for(Course c: reqCourses){
-			for(Course fc: finCourses){
-				if(c.equals(fc)){
-					totalMatches++;
-				}
-			}
+			if(finCourses.contains(c)) totalMatches++;
 		}
-	
-		if(totalMatches == reqCourses.size()){
+		if(reqCourses.size() == totalMatches){
 			return true;
 		}
+	
 		else return false;
 	}
 

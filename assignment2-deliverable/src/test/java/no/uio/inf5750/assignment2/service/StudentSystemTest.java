@@ -431,38 +431,15 @@ public class StudentSystemTest {
 	public void test_studentFulfillsDegreeRequirements() {
 		
 		int id1 = studentSystem.addCourse(cName1, cName2);
+		int id4 = studentSystem.addCourse("INF1000", "Programmering");
 		int id2 = studentSystem.addStudent(sName1);
 		int id3 = studentSystem.addDegree(dName1);
 	
-		Degree tmp1 = studentSystem.getDegree(id3);
-		Course tmp2 = studentSystem.getCourse(id1);
 		studentSystem.addRequiredCourseToDegree(id3, id1);
 		studentSystem.addAttendantToCourse(id1, id2);
-		studentSystem.studentFulfillsDegreeRequirements(id1, id3);
+		studentSystem.addDegreeToStudent(id2, id3);
 	
 		assertTrue(studentSystem.studentFulfillsDegreeRequirements(id2, id3));
-		
-/*		Student student = studentDAO.getStudent(studentId);
-		Degree degree = degreeDAO.getDegree(degreeId);
-		
-		Set<Course> reqCourses = degree.getRequiredCourses();
-		Set<Course> finCourses = student.getCourses();
-		
-		int totalMatches = 0;
-		
-		for(Course c: reqCourses){
-			for(Course fc: finCourses){
-				if(c.equals(fc)){
-					totalMatches++;
-				}
-			}
-		}
-	
-		if(totalMatches == reqCourses.size()){
-			return true;
-		}
-		else return false;
-	}
-	*/
+
 	}
 }

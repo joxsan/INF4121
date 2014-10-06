@@ -32,8 +32,10 @@
           <props>
             <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 <!--
+                
         <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>  
-        -->    
+        		
+        		-->    
                 <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
           </props>
     </property>
@@ -46,13 +48,15 @@
         <property name="user" value="sa"/>
         <property name="password" value=""/>
         
-    <!-- The postgres configuration is commented out. Left here as a hint for future assignments -->
+    <!-- The postgres configuration is commented out.-->
     <!--
+    
     <property name="driverClass" value="org.postgresql.Driver"/>
     <property name="jdbcUrl" value="jdbc:postgresql:product"/>
         <property name="user" value="sa"/>
         <property name="password" value="sa"/>
-        -->         
+        
+    -->         
   </bean>
  
   <bean id="studentDao" class="no.uio.inf5750.assignment2.dao.hibernate.HibernateStudentDao">
