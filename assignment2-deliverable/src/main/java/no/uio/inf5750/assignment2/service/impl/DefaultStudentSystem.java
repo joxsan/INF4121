@@ -240,12 +240,6 @@ public class DefaultStudentSystem implements StudentSystem {
 		for(Student st: s){
 			Collection<Degree> degree = st.getDegrees();
 			degree.remove(d);
-			/*for(Degree de: degree){
-				if(de.equals(d)){
-					degree.remove(d);
-				}
-				
-			}*/
 		}
 		
 		
@@ -421,6 +415,7 @@ public class DefaultStudentSystem implements StudentSystem {
 		for(Course c: reqCourses){
 			if(finCourses.contains(c)) totalMatches++;
 		}
+		
 		if(reqCourses.size() == totalMatches){
 			return true;
 		}
