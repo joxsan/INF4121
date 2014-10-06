@@ -1,6 +1,0 @@
-
-In order to implement the API in your project, you need a dependency to assignment2_api.
-
-In order to implement and run unit tests you need a dependency to JUnit (junit) and a dependency to Spring (spring-test). Dependencies are added in your pom.xml files. Since you have sub-projects, you have a master pom in the root directory and sub-poms in the sub-directories. Check if you have dependencies for JUnit and spring-test in your deliverable pom.xml file. We have already given you a pom.xml file in the deliverable directory. Normally you’d have to write this yourself. 
-
-In order to get the GUI working later on, check that your project is added as a dependency to the pom.xml in the assignment2-gui project.
