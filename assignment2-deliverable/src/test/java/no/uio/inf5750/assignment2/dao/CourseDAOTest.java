@@ -66,35 +66,38 @@ public class CourseDAOTest {
 	
 	@Test
 	public void test_getCourseByCourseCode(){
-	
-	courseDAO.saveCourse(course3);
-	coursetmp = courseDAO.getCourseByCourseCode("INF5750");
-	assertNotNull(coursetmp);
-	assertEquals(coursetmp, course3);
-	assertNotSame(coursetmp, course2);
-	coursetmp = null;
-	coursetmp = courseDAO.getCourseByCourseCode("INF404");
-	assertNull(coursetmp);
-	
+
+		courseDAO.saveCourse(course3);
+		coursetmp = courseDAO.getCourseByCourseCode("INF5750");
+		assertNotNull(coursetmp);
+		assertEquals(coursetmp, course3);
+		assertNotSame(coursetmp, course2);
+		coursetmp = null;
+		coursetmp = courseDAO.getCourseByCourseCode("INF404");
+		assertNull(coursetmp);
+
 	}
-	
+
 	@Test
 	public void test_getCourseByName(){
-	courseDAO.saveCourse(course3);
-	coursetmp = courseDAO.getCourseByCourseCode("INF5750");
-	coursetmp = null;
-	coursetmp = courseDAO.getCourseByName(name3);
-	assertEquals(coursetmp, course3);
-	assertNotNull(coursetmp);
-	assertNotSame(coursetmp, course1);
-	coursetmp = courseDAO.getCourseByName("This is not a course");
-	assertNull(coursetmp);
+		courseDAO.saveCourse(course3);
+		coursetmp = courseDAO.getCourseByCourseCode("INF5750");
+		coursetmp = null;
+		coursetmp = courseDAO.getCourseByName(name3);
+		assertEquals(coursetmp, course3);
+		assertNotNull(coursetmp);
+		assertNotSame(coursetmp, course1);
+		coursetmp = courseDAO.getCourseByName("This is not a course");
+		assertNull(coursetmp);
 	}
-	
+
 	@Test
 	public void test_getAllCourse(){
-	Collection<Course> courses = (Collection<Course>) courseDAO.getAllCourses();
-	
+		courseDAO.saveCourse(course2);
+		courseDAO.saveCourse(course3);
+		Collection<Course> courses = (Collection<Course>) courseDAO.getAllCourses();
+		assertTrue(courses.size() == 2);
+
 	}
 	
 	@Test

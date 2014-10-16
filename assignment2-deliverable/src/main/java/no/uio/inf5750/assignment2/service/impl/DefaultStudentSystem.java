@@ -347,20 +347,32 @@ public class DefaultStudentSystem implements StudentSystem {
      */
 	@Override
 	public void delStudent(int studentId) {
+		
 		Student student = getStudent(studentId);
-		Collection<Course> c = student.getCourses();
 		
-		for(Course course: c){
-		Collection<Student> s = course.getAttendants();
-				for(Student st: s){
-					if(st.equals(student)){
-					s.remove(student);
-					}
-				}
-		
+		for(Course course: student.getCourses()){
+			course.getAttendants().remove(student);
 		}
 		
 		studentDAO.delStudent(student);
+		
+		
+	/*	Student student = getStudent(studentId);
+		Set<Course> c = student.getCourses(); //collection
+		
+		for(Course course: c){
+		Set<Student> s = course.getAttendants(); //collection
+				for(Student st: s){
+					if(st.equals(student)){
+					s.remove(student);
+					course.setAttendants(s); //ny
+					}
+				}
+		c.remove(course); //ny
+		}
+		student.setCourses(c); //ny
+		
+		studentDAO.delStudent(student);*/
 	}
 
 	 /**

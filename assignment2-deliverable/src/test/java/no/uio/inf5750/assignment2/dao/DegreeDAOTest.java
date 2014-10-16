@@ -42,7 +42,7 @@ public class DegreeDAOTest {
 		
 		int degreeID = degreeDAO.saveDegree(degree1);
 		degree1 = degreeDAO.getDegree(degreeID);
-		
+		assertNotNull(degree1);
 		assertEquals(degreeID, degree1.getId());
 	}
 	
@@ -70,11 +70,14 @@ public class DegreeDAOTest {
 	public void test_getAllDegrees(){
 		degreeDAO.saveDegree(degree1);
 		Collection<Degree> degrees = (Collection<Degree>) degreeDAO.getAllDegrees();
+		assertNotNull(degrees);
 		assertTrue(degrees.size() > 0);	
 	}
 	
 	@Test
 	public void test_delDegree(){
+		int f = degreeDAO.saveDegree(degree1);
+		assertNotNull(f);
 		degreeDAO.delDegree(degree1);
 		degreetmp = degreeDAO.getDegreeByType(type1);
 		assertNull(degreetmp);
