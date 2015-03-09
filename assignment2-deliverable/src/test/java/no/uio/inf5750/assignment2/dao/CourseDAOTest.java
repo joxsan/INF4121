@@ -59,6 +59,7 @@ public class CourseDAOTest {
 		int courseID = courseDAO.saveCourse(course1);
 		coursetmp = courseDAO.getCourse(courseID);
 		assertNotNull(coursetmp);
+		assertSame(coursetmp, course1);
 		coursetmp = courseDAO.getCourse(-1);
 		assertNull(coursetmp);
 	
@@ -93,10 +94,24 @@ public class CourseDAOTest {
 
 	@Test
 	public void test_getAllCourse(){
-		courseDAO.saveCourse(course2);
-		courseDAO.saveCourse(course3);
+		int idc1 =  courseDAO.saveCourse(course2);
+		int idc2 = courseDAO.saveCourse(course3);
+		Course tmp1 = courseDAO.getCourse(idc1);
+		Course tmp2 = courseDAO.getCourse(idc2);
 		Collection<Course> courses = (Collection<Course>) courseDAO.getAllCourses();
 		assertTrue(courses.size() == 2);
+		int cnt = 0;
+		for(Course c: courses){
+			if(cnt == 0){
+				Course tmp3 = courseDAO.getCourse(c.getId());
+				assertSame(tmp3, course2);
+			}
+			if(cnt == 1){
+			Course tmp3 = courseDAO.getCourse(c.getId());
+			assertSame(tmp3, course3);	
+			}
+			cnt++;
+		}
 
 	}
 	
